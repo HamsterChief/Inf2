@@ -12,7 +12,8 @@ public class LoginService : ILoginService
 {
 
     private readonly DatabaseContext _context;
-    private readonly string _connectionString = "Data Source=webdev.sqlite;version=3;";
+    private readonly string _connectionString = "Data Source=webdev.sqlite;";
+
 
     public LoginService(DatabaseContext context)
     {
@@ -28,7 +29,7 @@ public class LoginService : ILoginService
             {
                 connection.Open();
 
-                string query = "SELECT Password FROM users WHERE username = @username";
+                string query = "SELECT Password FROM Admin WHERE username = @username";
                 using (var command = new SqliteCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@username", username);
