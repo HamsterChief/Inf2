@@ -1,3 +1,4 @@
+using Microsoft.Data.Sqlite;
 using StarterKit.Models;
 using StarterKit.Utils;
 
@@ -11,6 +12,8 @@ public class LoginService : ILoginService
 {
 
     private readonly DatabaseContext _context;
+    private readonly string _connectionString = "Data Source=webdev.sqlite;";
+
 
     public LoginService(DatabaseContext context)
     {
@@ -20,6 +23,39 @@ public class LoginService : ILoginService
     public LoginStatus CheckPassword(string username, string inputPassword)
     {
         // TODO: Make this method check the password with what is in the database
-        return LoginStatus.IncorrectPassword;
+        try
+        {
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                connection.Open();
+
+                string query = "SELECT Password FROM Admin WHERE username = @username";
+                using (var command = new SqliteCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@username", username);
+
+                    var result = command.ExecuteScalar();
+                    if (result == null)
+                    {
+                        return LoginStatus.IncorrectUsername;
+                    }
+
+                    if (result.ToString() == EncryptionHelper.EncryptPassword(inputPassword))
+                    {
+                        return LoginStatus.Success;
+                    }
+                    else
+                    {
+                        return LoginStatus.IncorrectPassword;
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log or handle the exception
+            Console.WriteLine("Error: " + ex.Message);
+            return LoginStatus.IncorrectUsername;
+        }
     }
 }
