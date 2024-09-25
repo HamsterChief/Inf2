@@ -20,13 +20,41 @@ public class LoginController : Controller
     public IActionResult Login([FromBody] LoginBody loginBody)
     {
         // TODO: Impelement login method
+        if (string.IsNullOrEmpty(loginBody.Username) || string.IsNullOrEmpty(loginBody.Password)){
+            return BadRequest("username and password are a must.");
+        } 
+
+        var loginstatus = _loginService.CheckPassword(loginBody.Username, loginBody.Password);
+
+        if (loginstatus == LoginStatus.Success){
+            return Ok("Succesfully logged in.");
+        }
         return Unauthorized("Incorrect password");
     }
 
+    [HttpPost("/login/admin")]
+    public IActionResult LoginAdmin([FromForm] string username, [FromForm] string password){
+
+        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)){
+            return BadRequest("username and password are a must.");
+        }
+
+        var loginstatus = _loginService.CheckPassword(username, password);
+
+        if (loginstatus == LoginStatus.IncorrectPassword){
+            return Unauthorized("Incorrect password"); 
+        }
+
+        return Ok("Succesfully logged in as an admin.");
+        
+    }
+
+
     [HttpGet("IsAdminLoggedIn")]
-    public IActionResult IsAdminLoggedIn()
+    public IActionResult IsAdminLoggedIn()   
     {
         // TODO: This method should return a status 200 OK when logged in, else 403, unauthorized
+        
         return Unauthorized("You are not logged in");
     }
 
