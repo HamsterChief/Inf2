@@ -5,7 +5,7 @@ using StarterKit.Services;
 namespace StarterKit.Controllers;
 
 
-[Route("api/v1/Login")]
+[Route("api/v1")]
 public class LoginController : Controller
 {
     private readonly ILoginService _loginService;
@@ -17,7 +17,12 @@ public class LoginController : Controller
     }
 
     [HttpPost("login/admin")]
-    public IActionResult LoginAdmin([FromBody] LoginBody loginBody){
+    public IActionResult LoginAdmin([FromBody] LoginBody loginBody)
+    {
+        if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY)))
+        {
+            return Ok("You are already logged in");
+        }
 
         if (string.IsNullOrEmpty(loginBody.Username) || string.IsNullOrEmpty(loginBody.Password)){
             return BadRequest("username and password are a must.");
@@ -31,12 +36,10 @@ public class LoginController : Controller
         }
 
         return Unauthorized("Incorrect password"); 
-        
     }
 
-
-    [HttpGet("IsAdminLoggedIn")]
-    public IActionResult IsAdminLoggedIn()
+    [HttpGet("login/check")]
+    public IActionResult Check()
     {
         string? adminUserName = HttpContext.Session.GetString(AUTH_SESSION_KEY);
         if (!string.IsNullOrEmpty(adminUserName))
@@ -54,7 +57,7 @@ public class LoginController : Controller
         });
     }
 
-    [HttpGet("Logout")]
+    [HttpGet("logout")]
     public IActionResult Logout()
     {
         return Ok("Logged out");
