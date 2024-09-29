@@ -33,4 +33,10 @@ public class TheatreShowController : ControllerBase {
         _showService.CreateShow(show);
         return Ok("Show has been created.");
     }
+
+    [HttpPut("{id}")]
+    public IActionResult UpdateShow(int id, TheatreShow show){
+        _showService.UpdateShow(id, show);
+        return Ok("Show updated");
+    }
 }
