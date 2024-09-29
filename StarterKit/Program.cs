@@ -10,7 +10,12 @@ namespace StarterKit
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews()
+                .AddJsonOptions(options =>
+                {
+                    // Dit voegt ondersteuning toe voor cyclische referenties
+                    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+                });
 
             builder.Services.AddDistributedMemoryCache();
 
@@ -22,6 +27,7 @@ namespace StarterKit
             });
 
             builder.Services.AddScoped<ILoginService, LoginService>();
+            builder.Services.AddScoped<ITheatreShowService, TheatreShowService>();
 
             builder.Services.AddDbContext<DatabaseContext>(
                 options => options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteDb")));
@@ -40,6 +46,8 @@ namespace StarterKit
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

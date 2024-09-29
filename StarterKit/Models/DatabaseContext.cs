@@ -12,11 +12,11 @@ namespace StarterKit.Models
 
         // Tables for the Theatre ticket case
 
-        // public DbSet<Customer> Customer { get; set; }
-        // public DbSet<Reservation> Reservation { get; set; }
-        // public DbSet<TheatreShowDate> TheatreShowDate { get; set; }
-        // public DbSet<TheatreShow> TheatreShow { get; set; }
-        // public DbSet<Venue> Venue { get; set; }
+        public DbSet<Customer> Customer { get; set; }
+        public DbSet<Reservation> Reservation { get; set; }
+        public DbSet<TheatreShowDate> TheatreShowDate { get; set; }
+        public DbSet<TheatreShow> TheatreShow { get; set; }
+        public DbSet<Venue> Venue { get; set; }
 
         // Tables for the event calendar case
 
