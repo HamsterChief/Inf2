@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|c:\\users\\jimmy\\onedrive\\documenten\\github\\inf2\\starterkit\\frontend\\src\\pages\\home.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|solutionrelative:frontend\\src\\pages\\home.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|c:\\users\\jimmy\\onedrive\\documenten\\github\\inf2\\starterkit\\services\\loginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|solutionrelative:services\\loginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -23,6 +27,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Home.tsx",
+              "DocumentMoniker": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Frontend\\src\\pages\\Home.tsx",
+              "RelativeDocumentMoniker": "Frontend\\src\\pages\\Home.tsx",
+              "ToolTip": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Frontend\\src\\pages\\Home.tsx",
+              "RelativeToolTip": "Frontend\\src\\pages\\Home.tsx",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2024-09-29T19:35:30.73Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "LoginService.cs",
               "DocumentMoniker": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Services\\LoginService.cs",
               "RelativeDocumentMoniker": "Services\\LoginService.cs",
@@ -35,7 +52,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "DatabaseContext.cs",
               "DocumentMoniker": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Models\\DatabaseContext.cs",
               "RelativeDocumentMoniker": "Models\\DatabaseContext.cs",

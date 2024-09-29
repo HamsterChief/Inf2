@@ -3,7 +3,7 @@ export default function Home() {
 
   return (
     <div className="container px-5 my-5">
-      <h1>Welcome to the Web development Starter kit!</h1>
+      <h1>Welcome To the test branch!</h1>
 
       <p>
         This starter kit contains a basic setup that should help you get up to speed with developing
