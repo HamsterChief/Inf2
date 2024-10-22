@@ -4,6 +4,7 @@ namespace StarterKit.Services
 {
     public class ReservationService : IReservationService
     {
+        //TEMPLATE LIST
         List<Reservation> reservations = new List<Reservation>();
 
         // get all reservations
@@ -33,7 +34,7 @@ namespace StarterKit.Services
         public Reservation? SearchByEmailAndID(string email, int id)
         {
             Reservation? R = reservations.FirstOrDefault(x => x.ReservationId == id && x.Customer.Email == email);
-            if (R == null) { Console.WriteLine("reservation not found");  }
+            if (R == null) { Console.WriteLine("reservation not found"); }
             return R;
         }
 
