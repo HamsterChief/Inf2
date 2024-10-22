@@ -3,12 +3,52 @@
   "WorkspaceRootPath": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|c:\\users\\jimmy\\onedrive\\documenten\\github\\inf2\\starterkit\\services\\reservationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|solutionrelative:services\\reservationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|c:\\users\\jimmy\\onedrive\\documenten\\github\\inf2\\starterkit\\services\\itheatreshowservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|solutionrelative:services\\itheatreshowservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|c:\\users\\jimmy\\onedrive\\documenten\\github\\inf2\\starterkit\\services\\loginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|solutionrelative:services\\loginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|c:\\users\\jimmy\\onedrive\\documenten\\github\\inf2\\starterkit\\services\\ireservationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|solutionrelative:services\\ireservationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|c:\\users\\jimmy\\onedrive\\documenten\\github\\inf2\\starterkit\\controllers\\reservationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|solutionrelative:controllers\\reservationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|c:\\users\\jimmy\\onedrive\\documenten\\github\\inf2\\starterkit\\models\\models.theatre.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|solutionrelative:models\\models.theatre.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|c:\\users\\jimmy\\onedrive\\documenten\\github\\inf2\\starterkit\\models\\models.calendar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|solutionrelative:models\\models.calendar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|c:\\users\\jimmy\\onedrive\\documenten\\github\\inf2\\starterkit\\models\\models.admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|solutionrelative:models\\models.admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|c:\\users\\jimmy\\onedrive\\documenten\\github\\inf2\\starterkit\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|solutionrelative:models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|c:\\users\\jimmy\\onedrive\\documenten\\github\\inf2\\starterkit\\models\\databasecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|solutionrelative:models\\databasecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|c:\\users\\jimmy\\onedrive\\documenten\\github\\inf2\\starterkit\\services\\iloginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|solutionrelative:services\\iloginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|c:\\users\\jimmy\\onedrive\\documenten\\github\\inf2\\starterkit\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5E763E7D-83C3-4635-8216-CC02D47961E9}|StarterKit.csproj|solutionrelative:controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -23,27 +63,157 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "ReservationService.cs",
+              "DocumentMoniker": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Services\\ReservationService.cs",
+              "RelativeDocumentMoniker": "Services\\ReservationService.cs",
+              "ToolTip": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Services\\ReservationService.cs",
+              "RelativeToolTip": "Services\\ReservationService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-22T09:00:33.661Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "IReservationService.cs",
+              "DocumentMoniker": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Services\\IReservationService.cs",
+              "RelativeDocumentMoniker": "Services\\IReservationService.cs",
+              "ToolTip": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Services\\IReservationService.cs",
+              "RelativeToolTip": "Services\\IReservationService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAABEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-22T08:56:40.751Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ITheatreShowService.cs",
+              "DocumentMoniker": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Services\\ITheatreShowService.cs",
+              "RelativeDocumentMoniker": "Services\\ITheatreShowService.cs",
+              "ToolTip": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Services\\ITheatreShowService.cs",
+              "RelativeToolTip": "Services\\ITheatreShowService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-22T08:56:02.999Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "LoginService.cs",
               "DocumentMoniker": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Services\\LoginService.cs",
               "RelativeDocumentMoniker": "Services\\LoginService.cs",
               "ToolTip": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Services\\LoginService.cs",
               "RelativeToolTip": "Services\\LoginService.cs",
-              "ViewState": "AQIAABQAAAAAAAAAAAAgwAAAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-24T09:35:42.791Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 6,
+              "Title": "Models.Calendar.cs",
+              "DocumentMoniker": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Models\\Models.Calendar.cs",
+              "RelativeDocumentMoniker": "Models\\Models.Calendar.cs",
+              "ToolTip": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Models\\Models.Calendar.cs",
+              "RelativeToolTip": "Models\\Models.Calendar.cs",
+              "ViewState": "AQIAACQAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-22T09:05:47.913Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Models.Theatre.cs",
+              "DocumentMoniker": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Models\\Models.Theatre.cs",
+              "RelativeDocumentMoniker": "Models\\Models.Theatre.cs",
+              "ToolTip": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Models\\Models.Theatre.cs",
+              "RelativeToolTip": "Models\\Models.Theatre.cs",
+              "ViewState": "AQIAACYAAAAAAAAAAADwvzgAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-22T09:05:56.032Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ReservationController.cs",
+              "DocumentMoniker": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Controllers\\ReservationController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ReservationController.cs",
+              "ToolTip": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Controllers\\ReservationController.cs",
+              "RelativeToolTip": "Controllers\\ReservationController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAuwAoAAAAZAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-22T08:48:57.496Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Models.Admin.cs",
+              "DocumentMoniker": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Models\\Models.Admin.cs",
+              "RelativeDocumentMoniker": "Models\\Models.Admin.cs",
+              "ToolTip": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Models\\Models.Admin.cs",
+              "RelativeToolTip": "Models\\Models.Admin.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-22T09:05:45.08Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ErrorViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Models\\ErrorViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\ErrorViewModel.cs",
+              "ToolTip": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Models\\ErrorViewModel.cs",
+              "RelativeToolTip": "Models\\ErrorViewModel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-22T09:05:46.155Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ILoginService.cs",
+              "DocumentMoniker": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Services\\ILoginService.cs",
+              "RelativeDocumentMoniker": "Services\\ILoginService.cs",
+              "ToolTip": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Services\\ILoginService.cs",
+              "RelativeToolTip": "Services\\ILoginService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-22T08:55:59.362Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "DatabaseContext.cs",
               "DocumentMoniker": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Models\\DatabaseContext.cs",
               "RelativeDocumentMoniker": "Models\\DatabaseContext.cs",
               "ToolTip": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Models\\DatabaseContext.cs",
               "RelativeToolTip": "Models\\DatabaseContext.cs",
-              "ViewState": "AQIAAB4AAAAAAAAAAAAuwDUAAAABAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAADUAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-11T14:50:45.838Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "LoginController.cs",
+              "DocumentMoniker": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Controllers\\LoginController.cs",
+              "RelativeDocumentMoniker": "Controllers\\LoginController.cs",
+              "ToolTip": "C:\\Users\\jimmy\\OneDrive\\Documenten\\GitHub\\Inf2\\StarterKit\\Controllers\\LoginController.cs",
+              "RelativeToolTip": "Controllers\\LoginController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-22T08:48:56.061Z",
               "EditorCaption": ""
             },
             {
