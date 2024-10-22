@@ -1,0 +1,75 @@
+### Test 1: Haal alle shows op zonder filters of sortering
+GET http://localhost:5097/api/v1/theatreshow
+Accept: application/json
+
+###
+
+### Test 2: Haal een show op met een specifieke ID
+GET http://localhost:5097/api/v1/theatreshow?id=1
+Accept: application/json
+
+###
+
+### Test 3: Filter op titel (bijv. shows die "Romeo" in de titel bevatten)
+GET http://localhost:5097/api/v1/theatreshow?title=Romeo
+Accept: application/json
+
+###
+
+### Test 4: Filter op beschrijving (bijv. shows die "tragisch" in de beschrijving bevatten)
+GET http://localhost:5097/api/v1/theatreshow?description=tragisch
+Accept: application/json
+
+###
+
+### Test 5: Filter op locatie/venue (bijv. alle shows in "Grand Theatre")
+GET http://localhost:5097/api/v1/theatreshow?venue=Grand%20Theatre
+Accept: application/json
+
+###
+
+### Test 6: Filter op datumbereik (bijv. shows tussen 1 januari 2024 en 31 december 2024)
+GET http://localhost:5097/api/v1/theatreshow?startDate=2024-01-01&endDate=2024-12-31
+Accept: application/json
+
+###
+
+### Test 7: Sorteer op prijs in oplopende volgorde
+GET http://localhost:5097/api/v1/theatreshow?sortBy=price&order=asc
+Accept: application/json
+
+###
+
+### Test 8: Sorteer op prijs in aflopende volgorde
+GET http://localhost:5097/api/v1/theatreshow?sortBy=price&order=desc
+Accept: application/json
+
+###
+
+### Test 9: Sorteer op datum (oudste shows eerst)
+GET http://localhost:5097/api/v1/theatreshow?sortBy=date&order=asc
+Accept: application/json
+
+###
+
+### Test 10: Sorteer op datum (nieuwste shows eerst)
+GET http://localhost:5097/api/v1/theatreshow?sortBy=date&order=desc
+Accept: application/json
+
+###
+
+### Test 11: Filter op titel en sorteer op prijs (aflopend)
+GET http://localhost:5097/api/v1/theatreshow?title=Romeo&sortBy=price&order=desc
+Accept: application/json
+
+###
+
+### Test 12: Filter op locatie en sorteer op datum (oplopend)
+GET http://localhost:5097/api/v1/theatreshow?venue=Grand%20Theatre&sortBy=date&order=asc
+Accept: application/json
+
+###
+
+### Test 13: Filter op datumbereik en sorteer op titel (aflopend)
+GET http://localhost:5097/api/v1/theatreshow?startDate=2024-06-01&endDate=2024-12-31&sortBy=title&order=desc
+Accept: application/json

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using StarterKit.Models;
 
 namespace StarterKit.Services
@@ -22,5 +22,8 @@ namespace StarterKit.Services
 
         // remove Reservation
         public void DeleteReservation(Reservation reservation);
+
+        double CalculateTotalPrice(List<Reservation> reservations);
+        public Task SaveReservations(List<Reservation> reservations);
     }
 }

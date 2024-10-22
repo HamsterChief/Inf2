@@ -1,4 +1,5 @@
-﻿using StarterKit.Models;
+﻿using SQLitePCL;
+using StarterKit.Models;
 
 namespace StarterKit.Services
 {
@@ -7,24 +8,31 @@ namespace StarterKit.Services
         //TEMPLATE LIST
         List<Reservation> reservations = new List<Reservation>();
 
+        private readonly DatabaseContext _context;
+        public ReservationService(DatabaseContext context)
+        {
+            _context = context;
+        }
+
+
         // get all reservations
         public List<Reservation> GetAllReservations()
         {
-            return reservations;
+            return _context.Reservation.ToList();
         }
 
         // get reservations by show and date
         public List<Reservation>? GetByShowDate(TheatreShow Tshow)
         {
             //TheatreshowDate has a theatreshow object
-            List<Reservation>? R = reservations.Where(x => x.TheatreShowDate.TheatreShow == Tshow).ToList();
+            List<Reservation>? R = _context.Reservation.Where(x => x.TheatreShowDate.TheatreShow == Tshow).ToList();
             if (R == null) { Console.WriteLine("reservations not found"); }
             return R;
         }
 
         public List<Reservation> GetByShowDate(TheatreShowDate Tdate)
         {
-            List<Reservation>? R = reservations.Where(x => x.TheatreShowDate == Tdate).ToList();
+            List<Reservation>? R = _context.Reservation.Where(x => x.TheatreShowDate == Tdate).ToList();
             if (R == null) { Console.WriteLine("reservations not found"); }
             return R;
         }
@@ -33,7 +41,7 @@ namespace StarterKit.Services
         // get by email and id
         public Reservation? SearchByEmailAndID(string email, int id)
         {
-            Reservation? R = reservations.FirstOrDefault(x => x.ReservationId == id && x.Customer.Email == email);
+            Reservation? R = _context.Reservation.FirstOrDefault(x => x.ReservationId == id && x.Customer.Email == email);
             if (R == null) { Console.WriteLine("reservation not found"); }
             return R;
         }
@@ -41,16 +49,12 @@ namespace StarterKit.Services
         // mark reservation
         public void MarkReservation(Reservation reservation)
         {
-            int index = reservations.FindIndex(r => r == reservation);
-            if (index != -1)
+            var reservationToUpdate = _context.Reservation.FirstOrDefault(r => r == reservation);
+
+            if (reservationToUpdate != null)
             {
-                // Update the reservation at the found index
-                reservations[index].Used = true; // Replace the reservation in the list with the new data
-                Console.WriteLine("Reservation marked and updated successfully.");
-            }
-            else
-            {
-                Console.WriteLine("Reservation not found.");
+                reservationToUpdate.Used = true;
+                _context.SaveChanges(); // Ensure the changes are saved to the database
             }
         }
 
@@ -58,49 +62,19 @@ namespace StarterKit.Services
         // remove Reservation
         public void DeleteReservation(Reservation reservation)
         {
-            reservations.Remove(reservation);
+            _context.Reservation.Remove(reservation);
+            return;
+        }
+        public double CalculateTotalPrice(List<Reservation> reservations)
+        {
+            return reservations.Select(r => r.TheatreShowDate.TheatreShow.Price * r.AmountOfTickets).Count();
+        }
+
+        public async Task SaveReservations(List<Reservation> reservations)
+        {
+            await _context.Reservation.AddRangeAsync(reservations);
+            await _context.SaveChangesAsync();
             return;
         }
     }
 }
-
-//public class Reservation
-//{
-//    public int ReservationId { get; set; }
-
-//    public int AmountOfTickets { get; set; }
-
-//    public bool Used { get; set; }
-
-//    public Customer? Customer { get; set; }
-
-//    public TheatreShowDate? TheatreShowDate { get; set; }
-//}
-
-//public class TheatreShowDate
-//{
-//    public int TheatreShowDateId { get; set; }
-
-//    public DateTime DateAndTime { get; set; } //"MM-dd-yyyy HH:mm"
-
-//    public List<Reservation>? Reservations { get; set; }
-
-//    public TheatreShow? TheatreShow { get; set; }
-
-//}
-
-//public class TheatreShow
-//{
-//    public int TheatreShowId { get; set; }
-
-//    public string? Title { get; set; }
-
-//    public string? Description { get; set; }
-
-//    public double Price { get; set; }
-
-//    public List<TheatreShowDate>? theatreShowDates { get; set; }
-
-//    public Venue? Venue { get; set; }
-
-//}

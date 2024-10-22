@@ -58,4 +58,25 @@ public class ReservationController : Controller
         ReservationService.DeleteReservation(reservation);
         return Ok($"Removed reservation with id:{reservation.ReservationId}");
     }
+
+    [HttpPost("create")]
+    public IActionResult MakeReservation([FromBody] List<Reservation> reservations)
+    {
+        string Message = "";
+
+        foreach (var reservation in reservations)
+        {
+            bool IsValid = reservation.TheatreShowDate.DateAndTime < DateTime.Now;
+            int SeatsLeft = reservation.TheatreShowDate.TheatreShow.Venue.Capacity;
+            bool IsAvailable = SeatsLeft < reservation.AmountOfTickets;
+
+            if (!IsValid) { Message += $"{reservation.TheatreShowDate.TheatreShow.Title} is not available anymore ({reservation.TheatreShowDate.DateAndTime})\n"; }
+            if (!IsAvailable) { Message += $"{reservation.TheatreShowDate.TheatreShow.Title} has not enough seats left ({SeatsLeft} left)\n"; }
+        }
+
+        if (!string.IsNullOrEmpty(Message)) { return Ok(Message); }
+
+        ReservationService.SaveReservations(reservations);
+        return Ok($"Total price of your order is {ReservationService.CalculateTotalPrice(reservations)}");
+    }
 }
