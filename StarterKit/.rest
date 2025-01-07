@@ -11,7 +11,7 @@ Accept: application/json
 ###
 
 ### Test 3: Filter op titel (bijv. shows die "Romeo" in de titel bevatten)
-GET http://localhost:5097/api/v1/theatreshow?title=Romeo
+GET http://localhost:5097/api/v1/theatreshow/shows
 Accept: application/json
 
 ###
