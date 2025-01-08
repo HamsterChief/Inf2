@@ -19,8 +19,22 @@ const ShowDetailsPage: React.FC = () => {
   useEffect(() => {
     const fetchShowDetails = async () => {
       try {
-        const response = await axios.get<TheatreShowDetails>(`/api/shows/${id}`);
-        setShow(response.data);
+        const response = await axios.get(`/api/v1/theatreshow?id=${id}`);
+        const data = response.data;
+
+        // Transform the received data
+        const futureDates = data.theatreShowDates?.$values.map(
+          (dateObj: any) => dateObj.dateAndTime
+        ) || [];
+
+        setShow({
+          theatreShowId: data.theatreShowId,
+          title: data.title,
+          description: data.description,
+          price: data.price,
+          venueName: data.venue?.name || "Unknown Venue",
+          futureDates,
+        });
       } catch (error) {
         console.error("Error fetching show details:", error);
       } finally {
@@ -46,11 +60,15 @@ const ShowDetailsPage: React.FC = () => {
       <p><strong>Price:</strong> ${show.price}</p>
       <p><strong>Venue:</strong> {show.venueName}</p>
       <p><strong>Upcoming Dates:</strong></p>
-      <ul>
-        {show.futureDates.map((date, index) => (
-          <li key={index}>{new Date(date).toLocaleString()}</li>
-        ))}
-      </ul>
+      {show.futureDates.length > 0 ? (
+        <ul>
+          {show.futureDates.map((date, index) => (
+            <li key={index}>{new Date(date).toLocaleString()}</li>
+          ))}
+        </ul>
+      ) : (
+        <p>No upcoming dates available.</p>
+      )}
     </div>
   );
 };
