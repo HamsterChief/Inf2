@@ -29,7 +29,7 @@ public class LoginService : ILoginService
             {
                 connection.Open();
 
-                string query = "SELECT Password FROM Admin WHERE username = @username";
+                string query = "SELECT Password FROM Admin WHERE UserName = @username COLLATE BINARY";
                 using (var command = new SqliteCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@username", username);
@@ -42,6 +42,7 @@ public class LoginService : ILoginService
 
                     if (result.ToString() == EncryptionHelper.EncryptPassword(inputPassword))
                     {
+                        Console.WriteLine($"Password match for username: {username}");
                         return LoginStatus.Success;
                     }
                     else

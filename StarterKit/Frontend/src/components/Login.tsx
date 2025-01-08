@@ -7,28 +7,37 @@ const Login: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
+  const clearSession = async () => {
+    await fetch('http://localhost:5097/api/v1/login/clear-session', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  };
+
+  clearSession();
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    console.log("Login clicked");
     
-    const response = await fetch('/api/login/admin', {
+    const response = await fetch('http://localhost:5097/api/v1/login/admin', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json', // Dit geeft aan dat je JSON verzendt
+        'Accept': 'application/json', // Dit vertelt de server dat je JSON als antwoord verwacht
+      },
       body: JSON.stringify({ username, password }),
     });
 
     const data = await response.json();
 
     if (response.ok) {
-      if (data.isAdmin) {
-        navigate('/dashboard');
-      } else {
-        setErrorMessage('You are not authorized to access the admin dashboard.');
-      }
+      console.log(data.message)
+      navigate('/dashboard');
     } else {
-      setErrorMessage(data.message || 'Login failed.');
-    }
+      setErrorMessage(data.message);
+    } 
   };
 
   return (
@@ -41,7 +50,6 @@ const Login: React.FC = () => {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            required
           />
         </div>
         <div>
@@ -50,7 +58,6 @@ const Login: React.FC = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
         </div>
         {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}

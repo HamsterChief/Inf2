@@ -21,21 +21,22 @@ public class LoginController : Controller
     {
         if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY)))
         {
-            return Ok("You are already logged in");
+            return Ok(new { message = "You are already logged in" });
         }
 
         if (string.IsNullOrEmpty(loginBody.Username) || string.IsNullOrEmpty(loginBody.Password)){
-            return BadRequest("username and password are a must.");
+            return BadRequest(new { message = "Username and password are a must." });
         }
 
         var loginstatus = _loginService.CheckPassword(loginBody.Username, loginBody.Password);
 
         if (loginstatus == LoginStatus.Success){
             HttpContext.Session.SetString(AUTH_SESSION_KEY, loginBody.Username);
-            return Ok("Succesfully logged in as an admin.");
+            return Ok(new { message = "Successfully logged in as an admin." });
         }
 
-        return Unauthorized("Incorrect password"); 
+        HttpContext.Session.Remove(AUTH_SESSION_KEY);
+        return Unauthorized(new { message = "Incorrect password or username" });
     }
 
     [HttpGet("login/check")]
@@ -60,9 +61,17 @@ public class LoginController : Controller
     [HttpGet("logout")]
     public IActionResult Logout()
     {
+        HttpContext.Session.Remove(AUTH_SESSION_KEY);
         return Ok("Logged out");
     }
 
+    [HttpGet("login/clear-session")]
+    public IActionResult ClearSession()
+    {
+        // Verwijder de sessie als deze bestaat
+        HttpContext.Session.Remove(AUTH_SESSION_KEY);
+        return Ok("Session cleared");
+    }
 }
 
 public class LoginBody
