@@ -24,8 +24,8 @@ const Login: React.FC = () => {
     const response = await fetch('http://localhost:5097/api/v1/login/admin', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json', // Dit geeft aan dat je JSON verzendt
-        'Accept': 'application/json', // Dit vertelt de server dat je JSON als antwoord verwacht
+        'Content-Type': 'application/json',
+        'Accept': 'application/json', 
       },
       body: JSON.stringify({ username, password }),
     });
@@ -41,27 +41,37 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>Username:</label>
+    <div className="container">
+      <form className="login-form" onSubmit={handleLogin}>
+        <h2>Admin Login</h2>
+
+        {/* Username Field */}
+        <div className="form-group">
+          <label htmlFor="username">Username</label>
           <input
             type="text"
+            id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
-        <div>
-          <label>Password:</label>
+
+        {/* Password Field */}
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
           <input
             type="password"
+            id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-        <button type="submit">Login</button>
+
+        {/* Error Message */}
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
+
+        {/* Submit Button */}
+        <button type="submit" className="login-btn">Login</button>
       </form>
     </div>
   );
