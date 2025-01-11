@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
+import EditShow from "./components/EditShow";
 import ErrorPage from "./shared/ErrorPage";
 
 createRoot(document.getElementById('root')!)
@@ -19,6 +20,9 @@ createRoot(document.getElementById('root')!)
 
                     {/* Route naar het Dashboard */}
                     <Route path="/dashboard" element={<Dashboard />} />
+
+                    {/* Route naar de Edit Show pagina */}
+                    <Route path="/show/edit/:id" element={<EditShow />} />
 
                     {/* Foutpagina voor niet-bestaande routes */}
                     <Route path="*" element={<ErrorPage />} />

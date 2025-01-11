@@ -13,20 +13,21 @@ public class TheatreShowController : ControllerBase {
         _showService = showService;
     }
 
-    // [HttpGet("all")]
-    // public IActionResult GetAllShows(){
-    //     var shows = _showService.GetShows();
-    //     return Ok(shows);
-    // }
+    [HttpGet("all")]
+    public IActionResult GetAllShows(){
+        var shows = _showService.GetShows();
+        Console.WriteLine(shows);
+        return Ok(shows);
+    }
 
-    // [HttpGet("{id}")]
-    // public IActionResult GetShow(int id){
-    //     var show = _showService.GetShow(id);
-    //     if (show != null){
-    //         return Ok(show);
-    //     }
-    //     return NotFound("No show found with the given id.");
-    // }
+    [HttpGet("{id}")]
+    public IActionResult GetShow(int id){
+        var show = _showService.GetShow(id);
+        if (show != null){
+            return Ok(show);
+        }
+        return NotFound("No show found with the given id.");
+    }
 
     [HttpGet]
     public IActionResult Get([FromQuery] int? id, [FromQuery] string? title, [FromQuery] string? description
@@ -86,7 +87,7 @@ public class TheatreShowController : ControllerBase {
     [HttpPost("create")]
     public IActionResult CreateShow([FromBody] TheatreShow show){
         _showService.CreateShow(show);
-        return Ok("Show has been created.");
+        return Ok(show);
     }
 
     [HttpPut("{id}")]
@@ -94,4 +95,11 @@ public class TheatreShowController : ControllerBase {
         _showService.UpdateShow(id, show);
         return Ok("Show updated");
     }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeleteShow(int id){
+        _showService.DeleteShow(id);
+        return Ok("Show deleted");
+    }
+    
 }
