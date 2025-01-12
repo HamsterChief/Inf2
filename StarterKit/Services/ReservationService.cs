@@ -63,16 +63,18 @@ namespace StarterKit.Services
         public void DeleteReservation(Reservation reservation)
         {
             _context.Reservation.Remove(reservation);
+            _context.SaveChangesAsync();
             return;
         }
-        public double CalculateTotalPrice(List<Reservation> reservations)
+        public double CalculateTotalPrice(Reservation reservation)
         {
-            return reservations.Select(r => r.TheatreShowDate.TheatreShow.Price * r.AmountOfTickets).Count();
+            var show = _context.TheatreShow.FirstOrDefault(x => reservation.TheatreShowDate.TheatreShow == x);
+            return show.Price * reservation.AmountOfTickets;
         }
 
-        public async Task SaveReservations(List<Reservation> reservations)
+        public async Task SaveReservations(Reservation reservation)
         {
-            await _context.Reservation.AddRangeAsync(reservations);
+            await _context.Reservation.AddAsync(reservation);
             await _context.SaveChangesAsync();
             return;
         }

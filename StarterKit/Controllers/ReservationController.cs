@@ -60,23 +60,49 @@ public class ReservationController : Controller
     }
 
     [HttpPost("create")]
-    public IActionResult MakeReservation([FromBody] List<Reservation> reservations)
+    public IActionResult MakeReservation([FromBody] Reservation reservation)
     {
         string Message = "";
 
-        foreach (var reservation in reservations)
+        // Check if TheatreShowDate and Customer are properly set
+        if (reservation.TheatreShowDate == null)
         {
-            bool IsValid = reservation.TheatreShowDate.DateAndTime < DateTime.Now;
-            int SeatsLeft = reservation.TheatreShowDate.TheatreShow.Venue.Capacity;
-            bool IsAvailable = SeatsLeft < reservation.AmountOfTickets;
-
-            if (!IsValid) { Message += $"{reservation.TheatreShowDate.TheatreShow.Title} is not available anymore ({reservation.TheatreShowDate.DateAndTime})\n"; }
-            if (!IsAvailable) { Message += $"{reservation.TheatreShowDate.TheatreShow.Title} has not enough seats left ({SeatsLeft} left)\n"; }
+            return BadRequest("TheatreShowDate information is missing.");
         }
 
-        if (!string.IsNullOrEmpty(Message)) { return Ok(Message); }
+        if (reservation.Customer == null)
+        {
+            return BadRequest("Customer information is missing.");
+        }
 
-        ReservationService.SaveReservations(reservations);
-        return Ok($"Total price of your order is {ReservationService.CalculateTotalPrice(reservations)}");
+        int SeatsLeft = reservation.TheatreShowDate?.TheatreShow?.Venue?.Capacity ?? 0;
+        bool IsValid = reservation.TheatreShowDate?.DateAndTime > DateTime.Now;
+        bool IsAvailable = SeatsLeft > reservation.AmountOfTickets;
+
+        if (!IsValid)
+        {
+            Message += $"{reservation.TheatreShowDate?.TheatreShow?.Title} is not available anymore ({reservation.TheatreShowDate?.DateAndTime})\n";
+        }
+
+        if (!IsAvailable)
+        {
+            Message += $"{reservation.TheatreShowDate?.TheatreShow?.Title} has not enough seats left ({SeatsLeft} left)\n";
+        }
+
+        if (!string.IsNullOrEmpty(Message))
+        {
+            return Ok(Message);
+        }
+
+        try
+        {
+            ReservationService.SaveReservations(reservation);
+            return Ok($"Total price of your order is {ReservationService.CalculateTotalPrice(reservation)}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error saving reservation: {ex.Message}");
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
     }
 }

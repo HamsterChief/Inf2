@@ -33,6 +33,13 @@ public class TheatreShowController : ControllerBase
     //     }
     //     return NotFound("No show found with the given id.");
     // }
+    [HttpGet("Vanue")]
+    public IActionResult GetVenue(int id)
+    {
+        var UserVenue = _context.Venue.FirstOrDefault(x => x.VenueId == id);
+        if(UserVenue == null) { return BadRequest(); }
+        return Ok(UserVenue);
+    }
 
     [HttpGet]
     public IActionResult Get([FromQuery] int? id, [FromQuery] string? title, [FromQuery] string? description
@@ -128,6 +135,8 @@ public class TheatreShowController : ControllerBase
         _showService.CreateShow(show);
         return Ok("Show has been created.");
     }
+
+    
 
     [HttpPut("{id}")]
     public IActionResult UpdateShow(int id, TheatreShow show)

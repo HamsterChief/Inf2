@@ -73,3 +73,28 @@ Accept: application/json
 ### Test 13: Filter op datumbereik en sorteer op titel (aflopend)
 GET http://localhost:5097/api/v1/theatreshow?startDate=2024-06-01&endDate=2024-12-31&sortBy=title&order=desc
 Accept: application/json
+
+###
+POST http://localhost:5097/api/reservation/create
+Content-Type: application/json
+
+{
+  "ReservationId": 2,
+  "AmountOfTickets": 3,
+  "Used": false,
+  "Customer": {
+    "CustomerId": 101,
+    "Name": "Jane Smith",
+    "Email": "jane.smith@example.com"
+  },
+  "TheatreShowDate": {
+    "DateAndTime": "2025-10-09",
+    "TheatreShow": {
+      "Title": "Unleash Customized Users",
+      "Venue": {
+        "Name": "N4L9JHGEJU",
+        "Capacity": 99
+      }
+    }
+  }
+}
