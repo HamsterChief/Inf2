@@ -3,7 +3,7 @@ using SQLitePCL;
 using StarterKit.Models;
 using StarterKit.Services;
 
-[Route("api/[controller]")]
+[Route("api/v1/reservation")]
 public class ReservationController : Controller
 {
     // AUTH_SESSION TEMPLATE NOT SECURE
@@ -66,18 +66,44 @@ public class ReservationController : Controller
 
         foreach (var reservation in reservations)
         {
-            bool IsValid = reservation.TheatreShowDate.DateAndTime < DateTime.Now;
-            int SeatsLeft = reservation.TheatreShowDate.TheatreShow.Venue.Capacity;
-            bool IsAvailable = SeatsLeft < reservation.AmountOfTickets;
+            // Ensure TheatreShowDate and TheatreShow are not null
+            if (reservation?.TheatreShowDate == null || reservation?.TheatreShowDate?.TheatreShow == null)
+            {
+                Message += "Theatre show or theatre show date is missing for reservation.\n";
+                continue; // Skip this reservation if it's invalid
+            }
 
-            if (!IsValid) { Message += $"{reservation.TheatreShowDate.TheatreShow.Title} is not available anymore ({reservation.TheatreShowDate.DateAndTime})\n"; }
-            if (!IsAvailable) { Message += $"{reservation.TheatreShowDate.TheatreShow.Title} has not enough seats left ({SeatsLeft} left)\n"; }
+            // Ensure that the Customer is not null
+            if (reservation?.Customer == null)
+            {
+                Message += "Customer data is missing.\n";
+                continue;
+            }
+
+            // Validating if reservation's date is in the past
+            bool IsValid = reservation.TheatreShowDate.DateAndTime > DateTime.Now;  // Checking if it's in the future
+            int SeatsLeft = reservation.TheatreShowDate.TheatreShow.Venue.Capacity;
+            bool IsAvailable = SeatsLeft >= reservation.AmountOfTickets;  // Corrected logic to check if there are enough seats available
+
+            if (!IsValid) 
+            { 
+                Message += $"{reservation.TheatreShowDate.TheatreShow.Title} is not available anymore ({reservation.TheatreShowDate.DateAndTime})\n"; 
+            }
+            if (!IsAvailable) 
+            { 
+                Message += $"{reservation.TheatreShowDate.TheatreShow.Title} has not enough seats left ({SeatsLeft} left)\n"; 
+            }
         }
 
-        if (!string.IsNullOrEmpty(Message)) { return Ok(Message); }
+        if (!string.IsNullOrEmpty(Message)) 
+        {
+            return Ok(Message); 
+        }
 
+        // Proceed to save the reservations if there are no issues
         ReservationService.SaveReservations(reservations);
         return Ok($"Total price of your order is {ReservationService.CalculateTotalPrice(reservations)}");
     }
+
 
 }

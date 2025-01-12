@@ -3,6 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import axios from 'axios';
 
+interface Customer {
+  id: number;
+  name: string;
+}
+
 interface Venue {
   venueId: number;
   name: string;
@@ -16,12 +21,25 @@ interface Show {
   description: string;
   price: number;
   venue: Venue;
+  date?: string; // Voeg de datum van de voorstelling toe (optioneel)
+}
+
+interface Reservation {
+  id: number;
+  amountOfTickets: number;
+  used: boolean;
+  show: Show; // Voeg de show property toe die naar een Show verwijst
+  customerName: string;
+  date: string;
 }
 
 const Dashboard: React.FC = () => {
   const [shows, setShows] = useState<Show[]>([]);
+  const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(false);
   const [venues, setVenues] = useState<Venue[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [customers, setCustomers] = useState<Customer[]>([]);
   const navigate = useNavigate();
   const [newShow, setNewShow] = useState<Show>({
     id: 0,
@@ -34,6 +52,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     fetchShows();
     fetchVenues();
+    fetchReservations();
   }, []);
 
   const fetchShows = async () => {
@@ -75,6 +94,72 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const fetchReservations = async () => {
+    try {
+      const response = await axios.get('http://localhost:5097/api/v1/reservation/all');
+      console.log("Fetched reservations: ", response.data);
+  
+      const showsResponse = await axios.get('http://localhost:5097/api/v1/theatreshow/all');
+      const showsData = showsResponse.data;
+  
+      const transformedReservations: Reservation[] = response.data.map((item: any) => {
+        const show = showsData.find((show: any) => show.id === item.showId);
+        
+        const customer = item.customer;
+        
+        // Controleer de aanwezigheid van theatreShowDate en de datum
+        const showDate = item.theatreShowDate?.dateAndTime
+          ? new Date(item.theatreShowDate.dateAndTime).toLocaleString('en-US', {
+              year: 'numeric',
+              month: 'numeric',
+              day: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+              hour12: true,
+            })
+          : 'Unknown date';
+
+        console.log("Show Date: ", showDate);  // Debug log voor showDate
+
+        return {
+          id: item.reservationId,
+          amountOfTickets: item.amountOfTickets,
+          used: item.used,
+          show: show || { title: 'Unknown Show', description: '', price: 0, venue: { name: 'Unknown Venue', capacity: 0 } },
+          customerName: customer ? `${customer.firstName} ${customer.lastName}` : 'Unknown',
+          date: showDate,  // Gebruik de datum van de voorstelling
+        };
+      });
+
+      setReservations(transformedReservations);
+    } catch (error) {
+      console.error("Error fetching reservations:", error);
+    }
+  };
+
+
+
+  
+  
+
+  // const fetchCustomers = async () => {
+  //   try {
+  //     const response = await axios.get('http://localhost:5097/api/v1/customer');
+  //     console.log("Fetched customers: ", response.data);
+  
+  //     const transformedCustomers: Customer[] = response.data.map((customer: any) => ({
+  //       id: customer.CustomerId,
+  //       name: customer.FirstName,
+  //     }));
+
+  //     console.log("Customername: ", transformedCustomers[0].name);
+      
+  //     setCustomers(transformedCustomers);
+  //   } catch (error) {
+  //     console.error('Error fetching customers:', error);
+  //   }
+  // };
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
@@ -100,24 +185,20 @@ const Dashboard: React.FC = () => {
         venue: { venueId: newShow.venue.venueId }
       };
   
-      // Maak een POST request om de show aan te maken
       const response = await axios.post('http://localhost:5097/api/v1/theatreshow/create', payload);
 
       fetchShows();
   
-      // De server zou de gemaakte show terugsturen, inclusief het theatreShowId
-      const createdShow = response.data;  // Verkrijg de nieuwe show met ID en andere details
+      const createdShow = response.data;
   
-      // Voeg de nieuwe show toe aan de lijst van bestaande shows
       setShows((prevShows) => [
         ...prevShows,
         {
-          ...createdShow, // Nieuwe show met ID en venue
-          venue: newShow.venue,  // Venue gegevens blijven intact
+          ...createdShow,
+          venue: newShow.venue,
         },
       ]);
   
-      // Reset het formulier na succesvol toevoegen
       alert('New show added successfully!');
       setNewShow({
         id: 0,
@@ -133,7 +214,6 @@ const Dashboard: React.FC = () => {
       alert('Failed to add new show');
     }
   };
-  
 
   const deleteShow = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this show?')) {
@@ -155,13 +235,20 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const filterReservations = (term: string) => {
+    return reservations.filter((reservation) =>
+      reservation.customerName.toLowerCase().includes(term.toLowerCase()) ||
+      reservation.show.title.toLowerCase().includes(term.toLowerCase())
+    );
+  };
+
   const truncateDescription = (description: string | undefined, maxLength: number = 100) => {
     if (!description) {
       return 'No description available';
     }
     return description.length > maxLength ? description.substring(0, maxLength) + '...' : description;
   };
-  
+
   return (
     <div className="dashboard-container">
       <h1>Admin Dashboard</h1>
@@ -170,81 +257,83 @@ const Dashboard: React.FC = () => {
         <div className="loading">Loading...</div>
       ) : (
         <div className="dashboard-content">
-          <div className="form-container">
-            <h2>Add New Show</h2>
-            <form onSubmit={handleSubmit}>
-              <div>
-                <label>Title</label>
-                <input
-                  type="text"
-                  name="title"
-                  value={newShow.title}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div>
-                <label>Description</label>
-                <textarea
-                  name="description"
-                  value={newShow.description}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div>
-                <label>Price</label>
-                <input
-                  type="number"
-                  name="price"
-                  value={newShow.price}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div>
-                <label>Venue</label>
-                <select
-                  name="venueId"
-                  value={newShow.venue.venueId}
-                  onChange={handleInputChange}
-                  required={venues.length > 0}
-                >
-                  {venues.length > 0 ? (
-                    <>
-                      <option value="">Select a venue</option>
-                      {venues.map((venue) => (
-                        <option key={venue.venueId} value={venue.venueId}>
-                          {venue.name}
-                        </option>
-                      ))}
-                    </>
-                  ) : (
-                    <option value="">No venues available</option>
-                  )}
-                </select>
-              </div>
-              <button type="submit">Add Show</button>
-            </form>
-          </div>
+          <div className="grid-container">
+            <div className="form-container">
+              <h2>Add New Show</h2>
+              <form onSubmit={handleSubmit}>
+                <div>
+                  <label>Title</label>
+                  <input
+                    type="text"
+                    name="title"
+                    value={newShow.title}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div>
+                  <label>Description</label>
+                  <textarea
+                    name="description"
+                    value={newShow.description}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div>
+                  <label>Price</label>
+                  <input
+                    type="number"
+                    name="price"
+                    value={newShow.price}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div>
+                  <label>Venue</label>
+                  <select
+                    name="venueId"
+                    value={newShow.venue.venueId}
+                    onChange={handleInputChange}
+                    required={venues.length > 0}
+                  >
+                    {venues.length > 0 ? (
+                      <>
+                        <option value="">Select a venue</option>
+                        {venues.map((venue) => (
+                          <option key={venue.venueId} value={venue.venueId}>
+                            {venue.name}
+                          </option>
+                        ))}
+                      </>
+                    ) : (
+                      <option value="">No venues available</option>
+                    )}
+                  </select>
+                </div>
+                <button type="submit">Add Show</button>
+              </form>
+            </div>
 
-          {shows.length > 0 ? (
-            <div className="table-container">
-              <table className="show-table">
-                <thead>
-                  <tr>
-                    <th>#</th> {/* Nieuwe kolom voor volgorde */}
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Venue</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {shows.map((show, index) => ( // Gebruik index als volgnummer
+            {shows.length > 0 && (
+              <div className="table-container">
+                <h2>Shows</h2>
+                <table className="show-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th>Price</th>
+                      <th>Venue</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {shows.map((show, index) => (
                       <tr key={show.id}>
-                        <td>{index + 1}</td> {/* Volgnummer (1-gebaseerd) */}
+                        <td>{index + 1}</td>
                         <td>{show.title}</td>
                         <td className="show-description">{truncateDescription(show.description)}</td>
                         <td>{show.price}</td>
@@ -255,12 +344,51 @@ const Dashboard: React.FC = () => {
                         </td>
                       </tr>
                     ))}
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+
+          {/* Search Input and Reservations Table */}
+          <div className="reservation-container">
+            <div className="table-container">
+              <h2>Reservations</h2>
+              <div className="search-container">
+                <input
+                  type="text"
+                  placeholder="Search reservations"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+
+              {filterReservations(searchTerm).length > 0 ? (
+                <table className="reservation-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Customer Name</th>
+                      <th>Theatre Show Date</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filterReservations(searchTerm).map((reservation, index) => (
+                      <tr key={reservation.id}>
+                        <td>{index + 1}</td>
+                        <td>{reservation.customerName || 'Unknown'}</td>
+                        <td>{reservation.date || 'No show date'}</td>
+                        <td>{reservation.used ? 'Used' : 'Not Used'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p>No reservations found</p>
+              )}
             </div>
-          ) : (
-            <p>No shows in database</p>
-          )}
+          </div>
         </div>
       )}
     </div>

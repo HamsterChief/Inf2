@@ -1,4 +1,5 @@
-﻿using SQLitePCL;
+﻿using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 using StarterKit.Models;
 
 namespace StarterKit.Services
@@ -18,7 +19,8 @@ namespace StarterKit.Services
         // get all reservations
         public List<Reservation> GetAllReservations()
         {
-            return _context.Reservation.ToList();
+            var reservations = _context.Reservation.Include(r => r.Customer).Include(r => r.TheatreShowDate).ToList();
+            return reservations;
         }
 
         // get reservations by show and date

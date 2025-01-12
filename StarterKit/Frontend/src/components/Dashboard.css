@@ -1,66 +1,149 @@
-/* Algemeen Dashboard Container */
-.dashboard-content {
-  display: flex;
-  gap: 20px;
-  width: 100%;
-  flex-wrap: wrap;
-  margin-top: 20px; /* Voeg wat ruimte toe bovenaan */
-}
 
-/* Container voor de tabel en het formulier naast elkaar */
-.dashboard-content {
-  display: flex;
-  gap: 20px; /* Ruimte tussen de tabel en het formulier */
-  width: 100%;
-  flex-wrap: wrap; /* Zorgt ervoor dat de items niet in de rij worden geplet bij kleinere schermen */
-}
-
-/* Tabel stijl */
-.show-table {
-  flex: 2;
-  border-collapse: collapse;
-  margin-top: 20px;
-  width: 100%;
-  border: 1px solid #ddd; /* Toegevoegd voor rand om de tabel */
-  border-radius: 8px; /* Hoeken afronden voor de tabel */
-  overflow: hidden; /* Zorgt ervoor dat de randen van de tabel netjes zijn */
-}
-
-/* Formulier container */
-.form-container {
-  flex: 1;
+.dashboard-container {
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px; /* Toegevoegd voor afronden van de hoeken van het formulier */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-top: 20px; /* Zorgt voor ruimte tussen de tabel en het formulier */
-}
-
-/* Stijl voor de tabel headers en cellen */
-.show-table th, .show-table td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-/* Tabel headers */
-.show-table th {
-  background-color: #f4f4f4;
+  font-family: Arial, sans-serif;
   color: #333;
 }
 
-/* Hover effect voor de tabelrijen */
+.dashboard-container h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.form-container {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-container {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.search-container input {
+  width: 20%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input, textarea, select {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  width: 100%; 
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; 
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: #27839f;
+  outline: none;
+  box-shadow: 0 0 5px rgba(39, 131, 159, 0.5);
+}
+
+button {
+  padding: 12px 20px;
+  border-radius: 4px;
+  background-color: #27839f;
+  color: white;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #1d5e76;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(39, 131, 159, 0.5);
+}
+
+.table-container {
+  max-height: 518px; 
+  overflow-y: auto; 
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table-container h2 {
+  margin-bottom: 10px;
+}
+
+.show-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.show-table th, .show-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.show-table th {
+  background-color: #f4f4f4;
+  color: #333;
+  text-align: left;
+}
+
 .show-table tr:hover {
   background-color: #f9f9f9;
 }
 
-/* Stijl voor de knoppen */
+
+.show-description {
+  max-width: 200px; 
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .edit-button, .delete-button {
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-right: 10px; /* Ruimte tussen de knoppen */
+  margin-right: 10px; 
 }
 
 .edit-button {
@@ -81,12 +164,42 @@
   background-color: #d13d3d;
 }
 
-/* Verklein de beschrijving als deze te lang is */
-.show-description {
-  max-width: 200px; /* Je kunt hier de breedte aanpassen */
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* Form neemt 1/3 van de ruimte, Table 2/3 */
+  gap: 20px;
+  align-items: start; /* Zorg dat items bovenaan uitgelijnd zijn */
+}
+
+
+/* Reservations Table */
+.reservation-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+  max-height: 300px; /* Pas de maximale hoogte aan zoals gewenst */
+  overflow-y: auto; /* Voeg een verticale scrollbar toe als de inhoud groter is dan de hoogte */
+}
+
+.reservation-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.reservation-table th, .reservation-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.reservation-table th {
+  background-color: #f4f4f4;
+  color: #333;
+  text-align: left;
+}
+
+.reservation-table tr:hover {
+  background-color: #f9f9f9;
 }
 
 /* Loading tekst */
@@ -94,62 +207,4 @@
   font-size: 1.5rem;
   text-align: center;
   margin-top: 50px;
-}
-
-/* Formulier styling */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px; /* Ruimte tussen de velden */
-}
-
-label {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-input, textarea, select {
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-  width: 100%; /* Zorg ervoor dat ze de volledige breedte benutten */
-}
-
-input[type="number"] {
-  -moz-appearance: textfield; /* Verbergt de spin-knoppen voor nummer invoer */
-}
-
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Focus effect voor velden */
-input:focus, textarea:focus, select:focus {
-  border-color: #27839f;
-  outline: none;
-  box-shadow: 0 0 5px rgba(39, 131, 159, 0.5);
-}
-
-/* Knop styling */
-button {
-  padding: 12px 20px;
-  border-radius: 4px;
-  background-color: #27839f;
-  color: white;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #1d5e76;
-}
-
-button:focus {
-  outline: none;
-  box-shadow: 0 0 5px rgba(39, 131, 159, 0.5);
 }
