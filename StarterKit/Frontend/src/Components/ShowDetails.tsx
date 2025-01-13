@@ -16,10 +16,7 @@ const ShowDetails: React.FC = () => {
   const navigate = useNavigate();
   const [show, setShow] = useState<TheatreShowDetails | null>(null);
   const [loading, setLoading] = useState(true);
-  const [reservationDetails, setReservationDetails] = useState({
-    AmountOfTickets: 1,
-    TheatreShowDate: null as string | null,
-  });
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchShowDetails = async () => {
@@ -27,9 +24,10 @@ const ShowDetails: React.FC = () => {
         const response = await axios.get(`/api/v1/theatreshow?id=${id}`);
         const data = response.data;
 
-        const futureDates = data.theatreShowDates?.$values.map(
-          (dateObj: any) => dateObj.dateAndTime
-        ) || [];
+        const futureDates =
+          data.theatreShowDates?.$values.map(
+            (dateObj: any) => dateObj.dateAndTime
+          ) || [];
 
         setShow({
           theatreShowId: data.theatreShowId,
@@ -50,37 +48,16 @@ const ShowDetails: React.FC = () => {
   }, [id]);
 
   const handleDateSelect = (date: string) => {
-    setReservationDetails({ ...reservationDetails, TheatreShowDate: date });
+    setSelectedDate(date);
   };
 
-  const handleReserveTickets = async () => {
-    if (show && reservationDetails.TheatreShowDate) {
-      try {
-        const response = await axios.post("http://localhost:5097/api/reservation/create", [
-          {
-            AmountOfTickets: reservationDetails.AmountOfTickets,
-            Customer: {
-              CustomerId: 101,
-              Name: "John Doe",
-              Email: "john.doe@example.com"
-            },
-            TheatreShowDate: {
-              DateAndTime: reservationDetails.TheatreShowDate,
-              TheatreShow: {
-                Title: show.title,
-                Venue: {
-                  Name: show.venueName,
-                  Capacity: 500
-                }
-              }
-            }
-          }
-        ]);
-        console.log("Reservation successful:", response.data);
-        navigate("/confirmation"); // Navigate to a confirmation page or another route
-      } catch (error) {
-        console.error("Error making reservation:", error);
-      }
+  const navigateToReservationForm = () => {
+    if (selectedDate && show) {
+      navigate(
+        `/reservation-form?showId=${show.theatreShowId}&date=${encodeURIComponent(
+          selectedDate
+        )}`
+      );
     }
   };
 
@@ -112,11 +89,11 @@ const ShowDetails: React.FC = () => {
       ) : (
         <p>No upcoming dates available.</p>
       )}
-      {reservationDetails.TheatreShowDate && (
-        <p><strong>Selected Date:</strong> {new Date(reservationDetails.TheatreShowDate).toLocaleString()}</p>
+      {selectedDate && (
+        <p><strong>Selected Date:</strong> {new Date(selectedDate).toLocaleString()}</p>
       )}
-      <button onClick={handleReserveTickets} disabled={!reservationDetails.TheatreShowDate}>
-        Reserve Tickets
+      <button onClick={navigateToReservationForm} disabled={!selectedDate}>
+        Proceed to Reservation
       </button>
     </div>
   );

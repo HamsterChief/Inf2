@@ -5,7 +5,7 @@ Accept: application/json
 ###
 
 ### Test 2: Haal een show op met een specifieke ID
-GET http://localhost:5097/api/v1/theatreshow?id=1
+GET http://localhost:5097/api/v1/theatreshow?id=3
 Accept: application/json
 
 ###
@@ -104,7 +104,6 @@ POST http://localhost:5097/api/reservation/create
 Content-Type: application/json
 
 {
-  "ReservationId": 2,
   "AmountOfTickets": 3,
   "Used": false,
   "Customer": {

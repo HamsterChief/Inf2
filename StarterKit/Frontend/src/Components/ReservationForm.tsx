@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 
@@ -13,6 +13,7 @@ interface TheatreShowDetails {
     capacity: number;
   };
   theatreShowDates: {
+    theatreShowDateId: number;
     dateAndTime: string;
   }[];
 }
@@ -20,11 +21,8 @@ interface TheatreShowDetails {
 const ReservationForm: React.FC = () => {
   const [searchParams] = useSearchParams();
   const reservationDate = searchParams.get("date");
-
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
+    CustomerId: 1,
     amountOfTickets: 1,
   });
 
@@ -34,13 +32,31 @@ const ReservationForm: React.FC = () => {
   useEffect(() => {
     const fetchShowDetails = async () => {
       try {
-        const showId = searchParams.get("showId");  // Assuming you pass the showId as a query param
-        if (showId) {
+        const showId = searchParams.get("showId"); 
+        if (showId != null) {
           const response = await axios.get(
             `http://localhost:5097/api/v1/theatreshow?id=${showId}`,
             { headers: { "Accept": "application/json" } }
           );
-          setShowDetails(response.data);
+          const data = response.data;
+
+          const futureDates =
+            data.theatreShowDates?.$values.map(
+              (dateObj: any) => new Date(dateObj.dateAndTime).toLocaleDateString('en-GB') // Convert to DD/MM/YYYY
+            ) || [];
+
+          setShowDetails({
+            theatreShowId: data.theatreShowId,
+            title: data.title,
+            description: data.description,
+            price: data.price,
+            venue: {
+              venueId: data.venue?.venueId || 0,
+              name: data.venue?.name || "",
+              capacity: data.venue?.capacity || 0,
+            },
+            theatreShowDates: data.theatreShowDates?.$values || [],
+          });
         }
       } catch (error) {
         console.error("Error fetching show details:", error);
@@ -54,41 +70,49 @@ const ReservationForm: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "amountOfTickets" ? parseInt(value, 10) : value,
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (reservationDate && showDetails) {
-      try {
-        const reservationPayload = [
-          {
-            AmountOfTickets: formData.amountOfTickets,
-            Customer: {
-              FirstName: formData.firstName,
-              LastName: formData.lastName,
-              Email: formData.email,
-            },
-            TheatreShowDate: {
-              DateAndTime: reservationDate,
-              TheatreShow: {
-                Title: showDetails.title,
-                Venue: {
-                  Name: showDetails.venue.name,
-                  Capacity: showDetails.venue.capacity,
-                },
-              },
-            },
-          },
-        ];
+      const formattedReservationDate = new Date(reservationDate).toLocaleDateString('en-GB'); // Convert to DD/MM/YYYY
+      const selectedDate = showDetails.theatreShowDates.find(
+        (d) => new Date(d.dateAndTime).toLocaleDateString('en-GB') === formattedReservationDate
+      );
 
+      if (!selectedDate) {
+        console.error("Invalid reservation date!");
+        return;
+      }
+
+      const theatreShowDateId = selectedDate.theatreShowDateId;
+
+      const payload = {
+        AmountOfTickets: formData.amountOfTickets,
+        Used: false,
+        Customer: {
+          CustomerId: formData.CustomerId,
+        },
+        TheatreShowDate: {
+          TheatreShowDateId: theatreShowDateId,
+        },
+      };
+
+      console.log("Reservation Payload:", payload);
+      alert("Reservation Payload:\n" + JSON.stringify(payload, null, 2));
+
+      try {
         const response = await axios.post(
           "http://localhost:5097/api/reservation/create",
-          reservationPayload
+          payload
         );
         console.log("Reservation successful:", response.data);
-        // Optionally navigate to a confirmation page after successful reservation
+        alert("Reservation confirmed!");
       } catch (error) {
         console.error("Error making reservation:", error);
       }
@@ -106,38 +130,23 @@ const ReservationForm: React.FC = () => {
   return (
     <div>
       <h2>Reservation Form</h2>
-      <p>Reservation Date: {new Date(reservationDate || "").toLocaleString()}</p>
+      <p>Reservation Date: {reservationDate && new Date(reservationDate).toLocaleString('en-GB')}</p> {/* Display date in DD/MM/YYYY format */}
       <h3>{showDetails.title}</h3>
       <p>{showDetails.description}</p>
-      <p><strong>Price:</strong> ${showDetails.price}</p>
-      <p><strong>Venue:</strong> {showDetails.venue.name} (Capacity: {showDetails.venue.capacity})</p>
+      <p>
+        <strong>Price:</strong> ${showDetails.price}
+      </p>
+      <p>
+        <strong>Venue:</strong> {showDetails.venue.name} (Capacity:{" "}
+        {showDetails.venue.capacity})
+      </p>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>First Name:</label>
+          <label>Customer ID:</label>
           <input
-            type="text"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Last Name:</label>
-          <input
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
+            type="number"
+            name="CustomerId"
+            value={formData.CustomerId}
             onChange={handleInputChange}
             required
           />
@@ -149,11 +158,11 @@ const ReservationForm: React.FC = () => {
             name="amountOfTickets"
             min="1"
             value={formData.amountOfTickets}
-            onChange={(e) => setFormData({ ...formData, amountOfTickets: parseInt(e.target.value, 10) })}
+            onChange={handleInputChange}
             required
           />
         </div>
-        <button type="submit">Confirm Reservation</button>
+        <button type="submit" disabled={!reservationDate}>Confirm Reservation</button>
       </form>
     </div>
   );
