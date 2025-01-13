@@ -5,7 +5,9 @@ import Home from "./pages/Home";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import EditShow from "./components/EditShow";
+import ReservationForm from "./components/ReservationForm";
 import ErrorPage from "./shared/ErrorPage";
+import ShowDetailsPage from "./pages/Details";  
 
 createRoot(document.getElementById('root')!)
     .render(
@@ -14,6 +16,8 @@ createRoot(document.getElementById('root')!)
                 <Routes>
                     {/* Route naar de Home pagina */}
                     <Route path="/" element={<Home />} />
+
+                    <Route path="shows/:id" element={<ShowDetailsPage />} />
                     
                     {/* Route naar de Login pagina */}
                     <Route path="/login" element={<Login />} />
@@ -23,6 +27,8 @@ createRoot(document.getElementById('root')!)
 
                     {/* Route naar de Edit Show pagina */}
                     <Route path="/show/edit/:id" element={<EditShow />} />
+
+                    <Route path="/reservation-form" element={<ReservationForm />} />
 
                     {/* Foutpagina voor niet-bestaande routes */}
                     <Route path="*" element={<ErrorPage />} />

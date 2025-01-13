@@ -98,10 +98,10 @@ const Dashboard: React.FC = () => {
     try {
       const response = await axios.get('http://localhost:5097/api/v1/reservation/all');
       console.log("Fetched reservations: ", response.data);
-  
+    
       const showsResponse = await axios.get('http://localhost:5097/api/v1/theatreshow/all');
       const showsData = showsResponse.data;
-  
+    
       const transformedReservations: Reservation[] = response.data.map((item: any) => {
         const show = showsData.find((show: any) => show.id === item.showId);
         
@@ -118,9 +118,9 @@ const Dashboard: React.FC = () => {
               hour12: true,
             })
           : 'Unknown date';
-
+  
         console.log("Show Date: ", showDate);  // Debug log voor showDate
-
+  
         return {
           id: item.reservationId,
           amountOfTickets: item.amountOfTickets,
@@ -130,12 +130,13 @@ const Dashboard: React.FC = () => {
           date: showDate,  // Gebruik de datum van de voorstelling
         };
       });
-
+  
       setReservations(transformedReservations);
     } catch (error) {
       console.error("Error fetching reservations:", error);
     }
   };
+  
 
 
 
@@ -252,7 +253,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="dashboard-container">
       <h1>Admin Dashboard</h1>
-
+  
       {loading ? (
         <div className="loading">Loading...</div>
       ) : (
@@ -278,6 +279,7 @@ const Dashboard: React.FC = () => {
                     value={newShow.description}
                     onChange={handleInputChange}
                     required
+                    maxLength={75}
                   />
                 </div>
                 <div>
@@ -315,23 +317,24 @@ const Dashboard: React.FC = () => {
                 <button type="submit">Add Show</button>
               </form>
             </div>
-
-            {shows.length > 0 && (
-              <div className="table-container">
-                <h2>Shows</h2>
-                <table className="show-table">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Title</th>
-                      <th>Description</th>
-                      <th>Price</th>
-                      <th>Venue</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {shows.map((show, index) => (
+  
+            {/* Shows Table */}
+            <div className="table-container">
+              <h2>Shows</h2>
+              <table className="show-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Venue</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {shows.length > 0 ? (
+                    shows.map((show, index) => (
                       <tr key={show.id}>
                         <td>{index + 1}</td>
                         <td>{show.title}</td>
@@ -343,13 +346,17 @@ const Dashboard: React.FC = () => {
                           <button className="delete-button" onClick={() => deleteShow(show.id)}>Delete</button>
                         </td>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={6} style={{ textAlign: 'center' }}>No shows available</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
-
+  
           {/* Search Input and Reservations Table */}
           <div className="reservation-container">
             <div className="table-container">
@@ -362,37 +369,41 @@ const Dashboard: React.FC = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-
-              {filterReservations(searchTerm).length > 0 ? (
-                <table className="reservation-table">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Customer Name</th>
-                      <th>Theatre Show Date</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filterReservations(searchTerm).map((reservation, index) => (
+  
+              <table className="reservation-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Customer Name</th>
+                    <th>Theatre Show Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filterReservations(searchTerm).length > 0 ? (
+                    filterReservations(searchTerm).map((reservation, index) => (
                       <tr key={reservation.id}>
                         <td>{index + 1}</td>
                         <td>{reservation.customerName || 'Unknown'}</td>
                         <td>{reservation.date || 'No show date'}</td>
                         <td>{reservation.used ? 'Used' : 'Not Used'}</td>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <p>No reservations found</p>
-              )}
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={4} style={{ textAlign: 'center' }}>No reservations available</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       )}
     </div>
   );
+  
+  
 };
 
 export default Dashboard;

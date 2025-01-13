@@ -121,6 +121,7 @@ const EditShow: React.FC = () => {
             name="description" 
             value={show.description} 
             onChange={handleInputChange} 
+            maxLength={75}
           />
         </div>
         <div>

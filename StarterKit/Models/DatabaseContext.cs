@@ -48,6 +48,16 @@ namespace StarterKit.Models
                 .HasOne(t => t.Venue) // TheatreShow heeft één Venue
                 .WithMany(v => v.TheatreShows) // Venue heeft veel TheatreShows
                 .HasForeignKey("VenueId");
+            
+            modelBuilder.Entity<Reservation>()
+                .HasOne(r => r.TheatreShowDate)  // Assuming Reservation has a reference to TheatreShow
+                .WithMany(t => t.Reservations) // Assuming TheatreShow has a collection of Reservations
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            modelBuilder.Entity<TheatreShowDate>()
+                .HasOne(tsd => tsd.TheatreShow)        // A TheatreShowDate has one TheatreShow
+                .WithMany(ts => ts.theatreShowDates)   // A TheatreShow can have many TheatreShowDates
+                .OnDelete(DeleteBehavior.Cascade); 
 
             
             modelBuilder.Entity<Admin>()

@@ -1,12 +1,14 @@
-export default function Home() {
+import React from "react";
+import ShowList from "../components/ShowList";
 
+const HomePage: React.FC = () => {
   return (
-    <div className="container px-5 my-5">
-      <h1>Welcome to the reservation theatre website!</h1>
-
-    
-
-
-    </div >
+    <div>
+      <h1>TheatreHub</h1>
+      <h2>Upcoming Theatre Shows</h2>
+      <ShowList />
+    </div>
   );
-}
+};
+
+export default HomePage;

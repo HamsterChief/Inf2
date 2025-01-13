@@ -8,10 +8,12 @@ public class ReservationController : Controller
 {
     // AUTH_SESSION TEMPLATE NOT SECURE
     private string AUTH_SESSION_KEY = "admin_login";
+    private readonly DatabaseContext _context;
     IReservationService ReservationService;
-    public ReservationController(IReservationService reservationService)
+    public ReservationController(IReservationService reservationService, DatabaseContext context)
     {
         ReservationService = reservationService;
+        _context = context;
     }
 
     [HttpGet("all")]
@@ -60,50 +62,25 @@ public class ReservationController : Controller
     }
 
     [HttpPost("create")]
-    public IActionResult MakeReservation([FromBody] List<Reservation> reservations)
+    public async Task<IActionResult> MakeReservation([FromBody] Reservation reservation)
     {
-        string Message = "";
-
-        foreach (var reservation in reservations)
+        if (reservation == null)
         {
-            // Ensure TheatreShowDate and TheatreShow are not null
-            if (reservation?.TheatreShowDate == null || reservation?.TheatreShowDate?.TheatreShow == null)
-            {
-                Message += "Theatre show or theatre show date is missing for reservation.\n";
-                continue; // Skip this reservation if it's invalid
-            }
-
-            // Ensure that the Customer is not null
-            if (reservation?.Customer == null)
-            {
-                Message += "Customer data is missing.\n";
-                continue;
-            }
-
-            // Validating if reservation's date is in the past
-            bool IsValid = reservation.TheatreShowDate.DateAndTime > DateTime.Now;  // Checking if it's in the future
-            int SeatsLeft = reservation.TheatreShowDate.TheatreShow.Venue.Capacity;
-            bool IsAvailable = SeatsLeft >= reservation.AmountOfTickets;  // Corrected logic to check if there are enough seats available
-
-            if (!IsValid) 
-            { 
-                Message += $"{reservation.TheatreShowDate.TheatreShow.Title} is not available anymore ({reservation.TheatreShowDate.DateAndTime})\n"; 
-            }
-            if (!IsAvailable) 
-            { 
-                Message += $"{reservation.TheatreShowDate.TheatreShow.Title} has not enough seats left ({SeatsLeft} left)\n"; 
-            }
+            return BadRequest("Reservation data is required");
         }
 
-        if (!string.IsNullOrEmpty(Message)) 
+        try
         {
-            return Ok(Message); 
+            await new ReservationService(_context).SaveReservations(reservation);
+            return Ok();
         }
-
-        // Proceed to save the reservations if there are no issues
-        ReservationService.SaveReservations(reservations);
-        return Ok($"Total price of your order is {ReservationService.CalculateTotalPrice(reservations)}");
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ex.Message);  // If customer or date is not found
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, "Internal server error");  // Catch any other unexpected errors
+        }
     }
-
-
 }

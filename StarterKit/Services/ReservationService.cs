@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿﻿using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
 using StarterKit.Models;
 
@@ -19,8 +19,7 @@ namespace StarterKit.Services
         // get all reservations
         public List<Reservation> GetAllReservations()
         {
-            var reservations = _context.Reservation.Include(r => r.Customer).Include(r => r.TheatreShowDate).ToList();
-            return reservations;
+            return _context.Reservation.Include(r => r.Customer).Include(r => r.TheatreShowDate).ToList();
         }
 
         // get reservations by show and date
@@ -65,18 +64,49 @@ namespace StarterKit.Services
         public void DeleteReservation(Reservation reservation)
         {
             _context.Reservation.Remove(reservation);
+            _context.SaveChangesAsync();
             return;
         }
-        public double CalculateTotalPrice(List<Reservation> reservations)
+        public double CalculateTotalPrice(Reservation reservation)
         {
-            return reservations.Select(r => r.TheatreShowDate.TheatreShow.Price * r.AmountOfTickets).Count();
+            var show = _context.TheatreShow.FirstOrDefault(x => reservation.TheatreShowDate.TheatreShow == x);
+            return show.Price * reservation.AmountOfTickets;
         }
 
-        public async Task SaveReservations(List<Reservation> reservations)
+       public async Task SaveReservations(Reservation reservation)
         {
-            await _context.Reservation.AddRangeAsync(reservations);
+            Console.WriteLine("Entering SaveReservationsAsync");
+            var customer = await _context.Customer
+                              .FirstOrDefaultAsync(x => x.Email == reservation.Customer.Email);
+            if (customer == null)
+            {
+                // Als klant niet bestaat, voeg een nieuwe toe
+                customer = new Customer
+                {
+                    FirstName = reservation.Customer.FirstName,
+                    LastName = reservation.Customer.LastName,
+                    Email = reservation.Customer.Email
+                };
+                await _context.Customer.AddAsync(customer);
+                await _context.SaveChangesAsync();
+
+                Console.WriteLine("made new customer");
+            }
+
+            var TheatreDate = await _context.TheatreShowDate
+                                            .FirstOrDefaultAsync(x => x.TheatreShowDateId == reservation.TheatreShowDate.TheatreShowDateId);
+
+            if (customer == null || TheatreDate == null)
+            {
+                throw new InvalidOperationException("Customer or TheatreShowDate not found");
+            }
+
+            reservation.Customer = customer;
+            reservation.TheatreShowDate = TheatreDate;
+
+            await _context.Reservation.AddAsync(reservation);
             await _context.SaveChangesAsync();
-            return;
         }
+    
     }
 }

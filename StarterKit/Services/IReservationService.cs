@@ -23,7 +23,7 @@ namespace StarterKit.Services
         // remove Reservation
         public void DeleteReservation(Reservation reservation);
 
-        double CalculateTotalPrice(List<Reservation> reservations);
-        public Task SaveReservations(List<Reservation> reservations);
+        double CalculateTotalPrice(Reservation reservation);
+        public Task SaveReservations(Reservation reservation);
     }
 }

@@ -13,7 +13,7 @@ public class TheatreShowService : ITheatreShowService
 
     public IEnumerable<TheatreShow> GetShows()
     {
-        var shows = _context.TheatreShow.Include(s => s.Venue).ToList();
+        var shows = _context.TheatreShow.Include(s => s.Venue).Include(s => s.theatreShowDates).ToList();
         foreach(var show in shows)
         {
             Console.WriteLine($"Show {show.Title} has venue: {show.Venue?.Name ?? "No venue"}");
@@ -64,6 +64,8 @@ public class TheatreShowService : ITheatreShowService
         }
     }
 
+
+
     public void DeleteShow(int id)
     {
         var reservations = _context.Reservation
@@ -92,5 +94,23 @@ public class TheatreShowService : ITheatreShowService
             // Sla de wijzigingen op in de database
             _context.SaveChanges();
         }
+    }
+
+    public void AddDatesToShow(int showId, List<TheatreShowDate> dates)
+    {
+        var show = _context.TheatreShow
+            .Include(s => s.theatreShowDates) // Laad de datums van de show
+            .FirstOrDefault(s => s.TheatreShowId == showId);
+
+        if (show == null)
+        {
+            throw new InvalidOperationException("Show not found.");
+        }
+
+        // Voeg de nieuwe datums toe aan de lijst van show datums
+        show.theatreShowDates.AddRange(dates);
+
+        // Sla de wijzigingen op in de database
+        _context.SaveChanges();
     }
 }
