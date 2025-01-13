@@ -32,7 +32,7 @@ namespace StarterKit.Models
     {
         public int TheatreShowDateId { get; set; }
 
-        public DateTime DateAndTime { get; set; } //"MM-dd-yyyy HH:mm"
+        public DateTime? DateAndTime { get; set; } //"MM-dd-yyyy HH:mm"
 
         public List<Reservation>? Reservations { get; set; }
 

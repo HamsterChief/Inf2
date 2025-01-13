@@ -76,20 +76,26 @@ namespace StarterKit.Services
 
         public async Task SaveReservations(Reservation reservation)
         {
-            Console.WriteLine("Entering SaveReservationsAsync");
-            var customer = await _context.Customer
-                                         .FirstOrDefaultAsync(x => x.CustomerId == reservation.Customer.CustomerId);
-            Console.WriteLine("passed customer");
-            var TheatreDate = await _context.TheatreShowDate
-                                            .FirstOrDefaultAsync(x => x.TheatreShowDateId == reservation.TheatreShowDate.TheatreShowDateId);
-
-            if (customer == null || TheatreDate == null)
+            if (reservation.Customer.FirstName == null || reservation.Customer.LastName == null || reservation.Customer.Email == null)
             {
-                throw new InvalidOperationException("Customer or TheatreShowDate not found");
+                var customer = await _context.Customer
+                                         .FirstOrDefaultAsync(x => x.CustomerId == reservation.Customer.CustomerId);
+                if (customer == null)
+                {
+                    throw new InvalidOperationException("Customer or TheatreShowDate not found");
+                }
+                reservation.Customer = customer;
             }
-
-            reservation.Customer = customer;
-            reservation.TheatreShowDate = TheatreDate;
+            if (reservation.TheatreShowDate.DateAndTime == null || reservation.TheatreShowDate.Reservations == null || reservation.TheatreShowDate.TheatreShow == null)
+            {
+                var TheatreDate = await _context.TheatreShowDate
+                                            .FirstOrDefaultAsync(x => x.TheatreShowDateId == reservation.TheatreShowDate.TheatreShowDateId);
+                if (TheatreDate == null)
+                {
+                    throw new InvalidOperationException("Customer or TheatreShowDate not found");
+                }
+                reservation.TheatreShowDate = TheatreDate;
+            }
 
             await _context.Reservation.AddAsync(reservation);
             await _context.SaveChangesAsync();
