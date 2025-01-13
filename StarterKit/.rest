@@ -98,3 +98,19 @@ Content-Type: application/json
     }
   }
 }
+
+###
+POST http://localhost:5097/api/reservation/create
+Content-Type: application/json
+
+{
+  "ReservationId": 2,
+  "AmountOfTickets": 3,
+  "Used": false,
+  "Customer": {
+    "CustomerId": 101
+  },
+  "TheatreShowDate": {
+    "TheatreShowDateId": 1
+  }
+}

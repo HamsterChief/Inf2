@@ -1,4 +1,6 @@
-﻿using SQLitePCL;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 using StarterKit.Models;
 
 namespace StarterKit.Services
@@ -74,9 +76,23 @@ namespace StarterKit.Services
 
         public async Task SaveReservations(Reservation reservation)
         {
+            Console.WriteLine("Entering SaveReservationsAsync");
+            var customer = await _context.Customer
+                                         .FirstOrDefaultAsync(x => x.CustomerId == reservation.Customer.CustomerId);
+            Console.WriteLine("passed customer");
+            var TheatreDate = await _context.TheatreShowDate
+                                            .FirstOrDefaultAsync(x => x.TheatreShowDateId == reservation.TheatreShowDate.TheatreShowDateId);
+
+            if (customer == null || TheatreDate == null)
+            {
+                throw new InvalidOperationException("Customer or TheatreShowDate not found");
+            }
+
+            reservation.Customer = customer;
+            reservation.TheatreShowDate = TheatreDate;
+
             await _context.Reservation.AddAsync(reservation);
             await _context.SaveChangesAsync();
-            return;
         }
     }
 }
