@@ -11,13 +11,13 @@ export interface Show {
     venueId: number;
     name: string;
     capacity: number;
-    theatreShows: any[]; // Aangenomen dat het een lijst van shows is
   };
   price: number;
+  ticketsReserved: number; // Aantal tickets gereserveerd
   theatreShowDates: {
     theatreShowDateId: number;
     dateAndTime: string;
-  }[]; // Nu een lijst van datums
+  }[];
 }
 
 const ShowList: React.FC = () => {
@@ -33,54 +33,76 @@ const ShowList: React.FC = () => {
   const [venues, setVenues] = useState<string[]>([]);
 
   useEffect(() => {
-    const fetchShows = async () => {
+    const fetchShowsAndReservations = async () => {
       try {
-        const response = await axios.get("api/v1/theatreshow/all");
-        const rawData = response.data;
-        console.log("API Response:", rawData); // Log de volledige response om te kijken naar de structuur
-    
-        const transformedShows: Show[] = rawData.map((item: any) => {
-          console.log("Processing item:", item); // Log elk item om te controleren of we `futureDates` kunnen vinden
-          
-          const futureDates = item.theatreShowDates ? item.theatreShowDates : []; // Checken of theatreShowDates bestaat
-          console.log("Future Dates:", futureDates); // Log futureDates om te zien wat we krijgen
-    
-          // Return de show met de datums als ze bestaan
-          return {
-            id: item.theatreShowId,
-            name: item.title,
-            description: item.description,
-            price: item.price,
-            venue: {
-              venueId: item.venueId,
-              name: item.venue.name,
-              capacity: item.venue.capacity,
-            },
-            theatreShowDates: futureDates.map((date: any) => ({
-              theatreShowDateId: date.theatreShowDateId,
-              dateAndTime: date.dateAndTime,
-            })),
-          };
-        });
+        const showsResponse = await axios.get("api/v1/theatreshow/all");
+        const reservationsResponse = await axios.get("api/v1/reservation/all");
+  
+        const rawShows = showsResponse.data;
+        // Zorg ervoor dat reservations altijd een array is
+        const reservations = Array.isArray(reservationsResponse.data)
+        ? reservationsResponse.data
+        : [];
+  
+        console.log("Fetched reservations:", reservations);
+  
+        const transformedShows: Show[] = rawShows.map((item: any) => ({
+          id: item.theatreShowId,
+          name: item.title,
+          description: item.description,
+          price: item.price,
+          ticketsReserved: 0, // Start altijd met 0 gereserveerde tickets
+          venue: {
+            venueId: item.venueId,
+            name: item.venue.name,
+            capacity: item.venue.capacity,
+          },
+          theatreShowDates: item.theatreShowDates?.map((date: any) => ({
+            theatreShowDateId: date.theatreShowDateId,
+            dateAndTime: date.dateAndTime,
+          })) || [],
+        }));
+        
+        // Bereken het aantal tickets per show
+        reservations.forEach((reservation: any) => {
+          const theatreShowDateId = reservation.theatreShowDate.theatreShowDateId;
 
-        console.log("Transformed Shows:", transformedShows); // Log transformedShows om te kijken wat we krijgen
-    
-        // Extract unique venues
+          // Vind de juiste show en voeg de tickets toe
+          const matchingShow = transformedShows.find((show) =>
+            show.theatreShowDates.some((date) => date.theatreShowDateId === theatreShowDateId)
+          );
+        
+          if (matchingShow) {
+            matchingShow.ticketsReserved += reservation.amountOfTickets;
+            console.log(`Added ${reservation.amountOfTickets} tickets to show ID: ${matchingShow.id}`);
+          } else {
+            console.log(`No matching show found for reservation with theatreShowDateId: ${theatreShowDateId}`);
+          }
+        });
+        
+        console.log("Final shows with tickets reserved:", transformedShows);
+        
+        setShows(transformedShows);
+
         const extractedVenues = [
           ...new Set(transformedShows.map((show) => show.venue.name)),
         ];
-    
-        setShows(transformedShows);
         setVenues(extractedVenues);
       } catch (error) {
-        console.error("Error fetching shows:", error);
+        console.error("Error fetching shows or reservations:", error);
       } finally {
         setLoading(false);
       }
     };
-    
-    fetchShows();
+  
+    fetchShowsAndReservations();
   }, []);
+
+  const mostPopularShow = shows.reduce(
+    (max, show) => (show.ticketsReserved > max.ticketsReserved ? show : max),
+    shows[0] // Start met de eerste show
+  );
+  
 
   const filteredShows = shows
     .filter((show) =>
@@ -104,6 +126,8 @@ const ShowList: React.FC = () => {
         return new Date(a.theatreShowDates[0]?.dateAndTime).getTime() - new Date(b.theatreShowDates[0]?.dateAndTime).getTime();
       if (sortOption === "date-descending")
         return new Date(b.theatreShowDates[0]?.dateAndTime).getTime() - new Date(a.theatreShowDates[0]?.dateAndTime).getTime();
+      if (sortOption === "popularity")
+        return b.ticketsReserved - a.ticketsReserved; // Sorteer op ticketsReserved (hoog naar laag)
       return 0;
     });
 
@@ -156,6 +180,7 @@ const ShowList: React.FC = () => {
           <option value="price-highest">Price: Highest</option>
           <option value="date-ascending">Date: Ascending</option>
           <option value="date-descending">Date: Descending</option>
+          <option value="popularity">Popularity</option>
         </select>
       </div>
 
@@ -164,7 +189,11 @@ const ShowList: React.FC = () => {
         {filteredShows.map((show) => (
           <li key={show.id} className="show-item">
             <Link to={`/shows/${show.id}`} className="show-link">
-              <h3>{show.name}</h3>
+              <h3>{show.name}
+                {show.id === mostPopularShow.id && (
+                    <span className="most-popular-label">Most Popular Show</span>
+                )}
+              </h3>
               <p>{show.venue.name} - ${show.price.toFixed(2)}</p>
               <p>{show.description}</p>
             </Link>

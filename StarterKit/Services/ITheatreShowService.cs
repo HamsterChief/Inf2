@@ -9,5 +9,6 @@ public interface ITheatreShowService {
     void UpdateShow(int id, TheatreShow show);   
     void DeleteShow(int id);   
 
-    void AddDatesToShow(int showId, List<TheatreShowDate> dates);           
+    void AddDatesToShow(int showId, List<TheatreShowDate> dates);       
+ 
 }

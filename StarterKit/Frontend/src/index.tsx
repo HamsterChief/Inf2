@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import EditShow from "./components/EditShow";
 import ReservationForm from "./components/ReservationForm";
+import PrivateRoute from './components/PrivateRoute';
 import ErrorPage from "./shared/ErrorPage";
 import ShowDetailsPage from "./pages/Details";  
 
@@ -22,8 +23,7 @@ createRoot(document.getElementById('root')!)
                     {/* Route naar de Login pagina */}
                     <Route path="/login" element={<Login />} />
 
-                    {/* Route naar het Dashboard */}
-                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
 
                     {/* Route naar de Edit Show pagina */}
                     <Route path="/show/edit/:id" element={<EditShow />} />

@@ -174,3 +174,9 @@
     max-height: 300px;
   }
 }
+
+.most-popular-label {
+  color: #1d5e76;
+  font-weight: bold;
+  margin-left: 13px;
+}
