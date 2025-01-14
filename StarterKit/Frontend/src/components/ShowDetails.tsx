@@ -121,9 +121,9 @@ const ShowDetailsPage: React.FC = () => {
       {reservationDetails.TheatreShowDate && (
         <p><strong>Selected Date:</strong> {new Date(reservationDetails.TheatreShowDate).toLocaleString()}</p>
       )}
-      <button onClick={handleReserveTickets} disabled={!reservationDetails.TheatreShowDate}>
+      {/* <button onClick={handleReserveTickets} disabled={!reservationDetails.TheatreShowDate}>
         Reserve Tickets
-      </button>
+      </button> */}
     </div>
   );
 };

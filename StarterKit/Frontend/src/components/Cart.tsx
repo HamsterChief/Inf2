@@ -107,6 +107,7 @@ export function RemoveFromCart(item: CartItem): void {
 
 const CartPage: React.FC = () => {
     const [cart, setCart] = useState<Cart>(initializeCart());
+    const navigate = useNavigate();
 
     useEffect(() => {
         const savedCart = getCartFromLocalStorage();
@@ -140,6 +141,10 @@ const CartPage: React.FC = () => {
         alert("Checkout complete!");
     };
 
+    const NavigateToHome = () => {
+        navigate('/');
+    }
+
     return (
         <div>
             <h1>Shopping Cart</h1>
@@ -161,6 +166,7 @@ const CartPage: React.FC = () => {
             {cart.Storage.length > 0 && (
                 <button onClick={handleCheckout}>Checkout</button>
             )}
+            <button onClick={NavigateToHome}>Go Back to Home</button>
         </div>
     );
 };

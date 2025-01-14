@@ -73,3 +73,116 @@ Accept: application/json
 ### Test 13: Filter op datumbereik en sorteer op titel (aflopend)
 GET http://localhost:5097/api/v1/theatreshow?startDate=2024-06-01&endDate=2024-12-31&sortBy=title&order=desc
 Accept: application/json
+
+###
+POST http://localhost:5097/api/v1/theatreshow/create 
+Content-Type: application/json
+
+{
+  "title": "Interstellar",
+  "description": "A team of explorers travel through a wormhole in space to ensure humanity's survival.",
+  "price": 60.0,
+  "venue": {
+    "venueId": 1
+  }
+}
+
+
+###
+PUT http://localhost:5097/api/v1/theatreshow/1
+Content-Type: application/json
+
+
+{
+  "title": "Star wars: A new Hope",
+  "description": "A movie about a young boy trying to save everyone in a distant galaxy, far away.",
+  "price": 40.0,
+  "venue": {
+    "name": "The National Theatre",
+    "capacity": 3000 
+  }
+}
+
+
+
+###
+DELETE http://localhost:5097/api/v1/theatreshow/4
+
+###
+GET http://localhost:5097/api/v1/theatreshow?id=1
+
+###
+
+GET http://localhost:5097/api/v1/theatreshow/all
+
+###
+
+GET http://localhost:5097/api/v1/venue/all
+
+
+
+###
+
+GET http://localhost:5097/api/v1/customer
+
+###
+
+GET http://localhost:5097/api/v1/reservation/all
+
+###
+
+
+POST http://localhost:5097/api/v1/venue/create
+Content-Type: application/json
+
+{
+  "name": "The Odyssey Theatre",
+  "capacity": 150
+}
+
+###
+
+POST http://localhost:5097/api/v1/customer
+Content-Type: application/json
+
+{
+  "FirstName": "John",
+  "LastName": "Doe",
+  "Email": "john.doe@example.com"
+}
+
+###
+
+POST http://localhost:5097/api/v1/date/create
+Content-Type: application/json
+
+{
+  "DateAndTime": "2025-02-15T19:00:00",
+  "TheatreShow": {
+    "theatreshowId": 1
+  }
+}
+
+###
+
+GET http://localhost:5097/api/v1/venue/all
+
+###
+
+POST http://localhost:5097/api/v1/reservation/create
+Content-Type: application/json
+
+{
+  "ReservationId": 2,
+  "AmountOfTickets": 3,
+  "Used": false,
+  "Customer": {
+    "CustomerId": 101,
+    "FirstName": "Jan",
+    "LastName": "Smit",
+    "Email": "jansmit@gmail.com"
+  },
+  "TheatreShowDate": {
+    "TheatreShowDateId": 1
+  }
+}
