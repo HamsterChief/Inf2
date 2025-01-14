@@ -9,6 +9,7 @@ import ReservationForm from "./components/ReservationForm";
 import PrivateRoute from './components/PrivateRoute';
 import ErrorPage from "./shared/ErrorPage";
 import ShowDetailsPage from "./pages/Details";  
+import CartPage from "./components/Cart";
 
 createRoot(document.getElementById('root')!)
     .render(
@@ -30,8 +31,13 @@ createRoot(document.getElementById('root')!)
 
                     <Route path="/reservation-form" element={<ReservationForm />} />
 
+                    {/* Route naar de Cart */}
+                    <Route path="/cart" element={<CartPage />} />
+
                     {/* Foutpagina voor niet-bestaande routes */}
                     <Route path="*" element={<ErrorPage />} />
+
+
                 </Routes>
             </BrowserRouter>
         </React.StrictMode>

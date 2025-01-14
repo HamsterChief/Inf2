@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+import { AddToCart, reservationPayload, CartItem } from './Cart'
 import axios from "axios";
 
 interface TheatreShowDetails {
@@ -18,6 +19,8 @@ interface TheatreShowDetails {
     dateAndTime: string;
   }[];
 }
+
+
 
 const ReservationForm: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -74,7 +77,7 @@ const ReservationForm: React.FC = () => {
           return;
         }
 
-        const reservationPayload = {
+        const reservationPayload: reservationPayload = {
           AmountOfTickets: formData.amountOfTickets,
           Customer: {
             FirstName: formData.firstName,
@@ -85,17 +88,17 @@ const ReservationForm: React.FC = () => {
             TheatreShowDateId: selectedShowDate.theatreShowDateId,  
           },
         };
+
+        const cartItem : CartItem = {
+          title: showDetails.title,
+          price: showDetails.price,
+          payload:  reservationPayload
+        }
         
-
-        console.log("Reservation Payload:", JSON.stringify(reservationPayload));
-
-        const response = await axios.post(
-          "http://localhost:5097/api/v1/reservation/create",
-          reservationPayload
-        );
-        console.log("Reservation successful:", response.data);
+        AddToCart(cartItem);
+        
         // Optionally navigate to a confirmation page after successful reservation
-        navigate("/");
+        navigate("/cart");
       } catch (error) {
         console.error("Error making reservation:", error);
       }
