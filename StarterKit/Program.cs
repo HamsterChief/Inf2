@@ -19,6 +19,12 @@ namespace StarterKit
 
             builder.Services.AddDistributedMemoryCache();
 
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+                options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+            });
+
             builder.Services.AddSession(options => 
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -28,6 +34,7 @@ namespace StarterKit
 
             builder.Services.AddScoped<ILoginService, LoginService>();
             builder.Services.AddScoped<ITheatreShowService, TheatreShowService>();
+            builder.Services.AddScoped<IReservationService, ReservationService>();
 
             builder.Services.AddDbContext<DatabaseContext>(
                 options => options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteDb")));

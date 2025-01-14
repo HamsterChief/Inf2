@@ -37,6 +37,29 @@ namespace StarterKit.Models
             modelBuilder.Entity<Admin>()
                 .HasIndex(p => p.UserName).IsUnique();
 
+            modelBuilder.Entity<TheatreShow>()
+                .HasKey(t => t.TheatreShowId);
+            
+            modelBuilder.Entity<TheatreShow>()
+                .Property(t => t.TheatreShowId)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<TheatreShow>()
+                .HasOne(t => t.Venue) // TheatreShow heeft één Venue
+                .WithMany(v => v.TheatreShows) // Venue heeft veel TheatreShows
+                .HasForeignKey("VenueId");
+            
+            modelBuilder.Entity<Reservation>()
+                .HasOne(r => r.TheatreShowDate)  // Assuming Reservation has a reference to TheatreShow
+                .WithMany(t => t.Reservations) // Assuming TheatreShow has a collection of Reservations
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            modelBuilder.Entity<TheatreShowDate>()
+                .HasOne(tsd => tsd.TheatreShow)        // A TheatreShowDate has one TheatreShow
+                .WithMany(ts => ts.theatreShowDates)   // A TheatreShow can have many TheatreShowDates
+                .OnDelete(DeleteBehavior.Cascade); 
+
+            
             modelBuilder.Entity<Admin>()
                 .HasData(new Admin { AdminId = 1, Email = "admin1@example.com", UserName = "admin1", Password = EncryptionHelper.EncryptPassword("password") });
             modelBuilder.Entity<Admin>()
