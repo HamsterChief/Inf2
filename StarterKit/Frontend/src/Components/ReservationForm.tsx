@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { addToCart, getCartFromLocalStorage, saveCartToLocalStorage, getCart, initializeCart } from './Cart';
 import axios from "axios";
 
 interface TheatreShowDetails {
@@ -28,11 +29,12 @@ const ReservationForm: React.FC = () => {
 
   const [showDetails, setShowDetails] = useState<TheatreShowDetails | null>(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();  // Initialize useNavigate here
 
   useEffect(() => {
     const fetchShowDetails = async () => {
       try {
-        const showId = searchParams.get("showId"); 
+        const showId = searchParams.get("showId");
         if (showId != null) {
           const response = await axios.get(
             `http://localhost:5097/api/v1/theatreshow?id=${showId}`,
@@ -113,6 +115,41 @@ const ReservationForm: React.FC = () => {
         );
         console.log("Reservation successful:", response.data);
         alert("Reservation confirmed!");
+
+        // Now, add the reservation details to the shopping cart
+        let cart = getCart(); // Load existing cart from localStorage
+        if (cart === null) {
+          cart = initializeCart();
+        }
+
+        const newItem = {
+          theatreShowId: showDetails.theatreShowId,
+          showName: showDetails.title,
+          price: showDetails.price,
+          quantity: formData.amountOfTickets,
+        };
+
+        // Check if item already exists in the cart
+        const existingItemIndex = cart.items.findIndex(item => item.showName === newItem.showName);
+
+        if (existingItemIndex !== -1) {
+          // Update quantity if item already in the cart
+          cart.items[existingItemIndex].quantity += newItem.quantity;
+        } else {
+          // Add new item to the cart
+          cart.items.push(newItem);
+        }
+
+        // Update the cart totals
+        cart.totalQuantity += newItem.quantity;
+        cart.totalPrice += newItem.price * newItem.quantity;
+
+        // Save the updated cart to localStorage
+        saveCartToLocalStorage(cart); // Save updated cart to localStorage
+
+        // Redirect to the cart page after successful reservation
+        navigate('/cart');  // Redirect to the cart page
+
       } catch (error) {
         console.error("Error making reservation:", error);
       }
